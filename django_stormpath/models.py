@@ -217,7 +217,7 @@ class StormpathBaseUser(AbstractBaseUser, PermissionsMixin):
             self._save_sp_group_memberships(acc)
             return acc
         except StormpathError as error:
-            if error.code == 404:
+            if error.status == 404:
                 raise self.DoesNotExist('Could not find Stormpath User.')
             raise error
 
