@@ -216,8 +216,10 @@ class StormpathBaseUser(AbstractBaseUser, PermissionsMixin):
             acc.save()
             self._save_sp_group_memberships(acc)
             return acc
-        except StormpathError:
-            raise self.DoesNotExist('Could not find Stormpath User.')
+        except StormpathError as error:
+            if error.code == 404:
+                raise self.DoesNotExist('Could not find Stormpath User.')
+            raise error
 
     def get_full_name(self):
         return "%s %s" % (self.given_name, self.surname)
